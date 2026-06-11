@@ -6,7 +6,7 @@ const mockGet = vi.fn()
 const mockSet = vi.fn()
 
 vi.mock('@upstash/redis', () => ({
-  Redis: vi.fn().mockImplementation(function () {
+  Redis: vi.fn().mockImplementation(function (this: Record<string, unknown>) {
     this.get = mockGet
     this.set = mockSet
   }),
