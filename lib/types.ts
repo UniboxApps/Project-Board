@@ -40,3 +40,11 @@ export type CachedDashboard = {
   lastRefreshed: string
   tabsProcessed: string[]
 }
+
+// Intermediate type: output of data tab parser, input to grouping logic
+export type ParsedRow = {
+  jobNumber: string
+  customerName: string
+  pmInitials: string
+  line: ProductLine
+}
