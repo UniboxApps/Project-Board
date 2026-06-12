@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from 'next/cache'
 import { Redis } from '@upstash/redis'
 import type { CachedDashboard } from '@/lib/types'
 import { REDIS_KEYS, ALWAYS_READ_TABS } from '@/config/constants'
@@ -19,6 +20,7 @@ function getRedis(): Redis {
 // --- Dashboard cache ---
 
 export async function getDashboard(): Promise<CachedDashboard | null> {
+  noStore()
   const raw = await getRedis().get<CachedDashboard>(REDIS_KEYS.dashboard)
   return raw ?? null
 }
