@@ -7,7 +7,8 @@ const runRefresh = jsonRoute('/api/cron', refreshDashboard)
 // Called by Vercel Cron on a schedule defined in vercel.json.
 // Protected by a shared secret so only the cron runner can trigger it.
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  const secret = req.headers.get('x-cron-secret') ?? req.nextUrl.searchParams.get('secret')
+  const authHeader = req.headers.get('authorization')
+  const secret = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : req.nextUrl.searchParams.get('secret')
 
   if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
