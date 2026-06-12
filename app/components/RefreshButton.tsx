@@ -6,7 +6,6 @@ import { formatLastRefreshed } from '@/lib/formatting'
 
 export default function RefreshButton({ lastRefreshed }: { lastRefreshed: string | null }) {
   const router = useRouter()
-  const [ts, setTs] = useState(lastRefreshed)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -16,8 +15,6 @@ export default function RefreshButton({ lastRefreshed }: { lastRefreshed: string
     try {
       const res = await fetch('/api/refresh', { method: 'POST' })
       if (!res.ok) throw new Error(`Refresh failed (${res.status})`)
-      const data = await res.json() as { lastRefreshed: string }
-      setTs(data.lastRefreshed)
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Refresh failed')
@@ -29,9 +26,9 @@ export default function RefreshButton({ lastRefreshed }: { lastRefreshed: string
   return (
     <div className="flex items-center gap-3">
       {error && <span className="text-red-600">{error}</span>}
-      {ts && (
+      {lastRefreshed && (
         <span className="text-gray-500" suppressHydrationWarning>
-          Last synced: {formatLastRefreshed(ts)}
+          Last synced: {formatLastRefreshed(lastRefreshed)}
         </span>
       )}
       <button
