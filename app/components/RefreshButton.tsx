@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { formatLastRefreshed } from '@/lib/formatting'
 
-export default function RefreshButton({ lastRefreshed }: { lastRefreshed: string }) {
+export default function RefreshButton({ lastRefreshed }: { lastRefreshed: string | null }) {
   const router = useRouter()
   const [ts, setTs] = useState(lastRefreshed)
   const [loading, setLoading] = useState(false)
@@ -28,14 +28,16 @@ export default function RefreshButton({ lastRefreshed }: { lastRefreshed: string
 
   return (
     <div className="flex items-center gap-3">
-      {error && <span className="text-sm text-red-600">{error}</span>}
-      <span className="text-sm text-gray-500" suppressHydrationWarning>
-        Last synced: {formatLastRefreshed(ts)}
-      </span>
+      {error && <span className="text-red-600">{error}</span>}
+      {ts && (
+        <span className="text-gray-500" suppressHydrationWarning>
+          Last synced: {formatLastRefreshed(ts)}
+        </span>
+      )}
       <button
         onClick={handleRefresh}
         disabled={loading}
-        className="text-sm px-3 py-1.5 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="px-3 py-1.5 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         {loading ? 'Refreshing…' : 'Refresh'}
       </button>

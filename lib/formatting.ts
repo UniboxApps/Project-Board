@@ -24,7 +24,7 @@ export function formatLastRefreshed(isoString: string): string {
 }
 
 export function formatGBP(value: number): string {
-  return '£' + value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  return '£' + value.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
 }
 
 export function formatDate(iso: string): string {

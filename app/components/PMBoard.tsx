@@ -13,12 +13,15 @@ export default function PMBoardCard({ board }: { board: PMBoard }) {
     <>
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         {/* Card header */}
-        <div className="px-5 py-4 border-b border-gray-100">
-          <h2 className="text-base font-semibold text-gray-900">{board.projectManager}</h2>
-          <p className="mt-0.5 text-sm text-gray-500">
+        <div className="px-5 py-3 border-b border-gray-100 flex items-center justify-between gap-4">
+          <h2 className="text-sm font-semibold text-gray-900 shrink-0">
+            {board.projectManager}{' '}
+            <span className="font-normal text-gray-400">({board.pmInitials})</span>
+          </h2>
+          <p className="text-sm text-gray-500 text-right whitespace-nowrap">
             {board.totalProjects} {board.totalProjects === 1 ? 'project' : 'projects'}
             <span className="mx-1.5 text-gray-300">·</span>
-            Total: {formatGBP(board.totalValue)}
+            {formatGBP(board.totalValue)}
           </p>
         </div>
 
