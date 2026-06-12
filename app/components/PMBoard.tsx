@@ -4,6 +4,7 @@ import { useState } from 'react'
 import type { PMBoard, JobDateGroup } from '@/lib/types'
 import JobRow from '@/app/components/JobRow'
 import JobDetailCard from '@/app/components/JobDetailCard'
+import { formatGBP } from '@/lib/formatting'
 
 export default function PMBoardCard({ board }: { board: PMBoard }) {
   const [selectedRow, setSelectedRow] = useState<JobDateGroup | null>(null)
@@ -56,6 +57,3 @@ export default function PMBoardCard({ board }: { board: PMBoard }) {
   )
 }
 
-function formatGBP(value: number): string {
-  return '£' + value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-}

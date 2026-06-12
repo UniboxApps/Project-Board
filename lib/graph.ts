@@ -25,10 +25,11 @@ async function getGraphToken(): Promise<string> {
   return data.access_token as string
 }
 
-// Returns all worksheet names in the workbook
-export async function listWorksheets(): Promise<string[]> {
+// Authenticated GET against the workbook, relative to SHAREPOINT_FILE_PATH.
+// `label` names the operation for error messages.
+async function graphGet(label: string, path: string): Promise<Record<string, unknown>> {
   const token = await getGraphToken()
-  const url = `${GRAPH_BASE}${process.env.SHAREPOINT_FILE_PATH}/workbook/worksheets`
+  const url = `${GRAPH_BASE}${process.env.SHAREPOINT_FILE_PATH}${path}`
 
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${token}` },
@@ -37,29 +38,24 @@ export async function listWorksheets(): Promise<string[]> {
 
   if (!res.ok) {
     const text = await res.text()
-    throw new Error(`listWorksheets failed (${res.status}): ${text}`)
+    throw new Error(`${label} failed (${res.status}): ${text}`)
   }
 
-  const data = await res.json()
+  return res.json()
+}
+
+// Returns all worksheet names in the workbook
+export async function listWorksheets(): Promise<string[]> {
+  const data = await graphGet('listWorksheets', '/workbook/worksheets')
   return (data.value as { name: string }[]).map((ws) => ws.name)
 }
 
 // Returns the full usedRange values matrix for a given sheet (row 0 = header)
 export async function getWorksheetRange(sheetName: string): Promise<unknown[][]> {
-  const token = await getGraphToken()
   const name = encodeURIComponent(sheetName)
-  const url = `${GRAPH_BASE}${process.env.SHAREPOINT_FILE_PATH}/workbook/worksheets/${name}/usedRange?$select=values`
-
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${token}` },
-    cache: 'no-store',
-  })
-
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(`getWorksheetRange("${sheetName}") failed (${res.status}): ${text}`)
-  }
-
-  const data = await res.json()
+  const data = await graphGet(
+    `getWorksheetRange("${sheetName}")`,
+    `/workbook/worksheets/${name}/usedRange?$select=values`,
+  )
   return data.values as unknown[][]
 }

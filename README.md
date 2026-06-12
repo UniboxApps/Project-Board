@@ -78,8 +78,16 @@ app/
     test-graph/route.ts # Dev/test endpoint — remove before production
   login/page.tsx        # Microsoft sign-in page
   layout.tsx            # Root layout
+  components/
+    StatusBadge.tsx     # Single pill badge (Install / Overdue / Due Soon)
+    StatusBadges.tsx    # Badge trio rendered by JobRow + JobDetailCard
+    JobRow.tsx          # Clickable table row with status colours
+    JobDetailCard.tsx   # Modal overlay with product lines table
+    PMBoard.tsx         # PM card with header + job table
+    RefreshButton.tsx   # Triggers /api/refresh + router.refresh()
+    TabSelector.tsx     # Settings — tab checkbox list
+    PMList.tsx          # Settings — read-only PM list
 components/ui/          # shadcn/ui components
-app/components/         # App-level components (Stages 11–12)
 lib/
   types.ts              # All shared TypeScript types
   graph.ts              # Microsoft Graph API calls (token + worksheet data)
@@ -87,7 +95,8 @@ lib/
   grouping.ts           # Job grouping and sorting logic (Stage 6)
   cache.ts              # Redis read/write helpers (Stage 7)
   worker.ts             # Full pipeline (Stage 8)
-  formatting.ts         # Row status: overdue / due-soon / normal (Stage 11)
+  formatting.ts         # Shared formatters: getRowStatus, formatGBP, formatDate, formatLastRefreshed
+  api.ts                # jsonRoute() — shared error-handling wrapper for API routes
 config/
   columns.ts            # COLUMN_MAP — single source of truth for Excel layout
   constants.ts          # REDIS_KEYS, ALWAYS_READ_TABS, CACHE_REFRESH_MINUTES
@@ -111,6 +120,7 @@ config/
 | 10 | API routes — /api/jobs, /api/refresh, /api/settings | Done |
 | 11 | Home dashboard — PM grid, tables, row formatting | Done |
 | 12 | Job detail card — modal overlay with product lines | Done |
+| — | Refactor + code-simplifier pass | Done |
 | 13 | Polish — skeletons, last synced, error boundaries, mobile | Next |
 
 ---

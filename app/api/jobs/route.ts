@@ -1,13 +1,4 @@
-import { NextResponse } from 'next/server'
 import { getDashboardOrRefresh } from '@/lib/worker'
+import { jsonRoute } from '@/lib/api'
 
-export async function GET() {
-  try {
-    const dashboard = await getDashboardOrRefresh()
-    return NextResponse.json(dashboard)
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    console.error('[/api/jobs]', message)
-    return NextResponse.json({ error: message }, { status: 500 })
-  }
-}
+export const GET = jsonRoute('/api/jobs', getDashboardOrRefresh)

@@ -22,3 +22,12 @@ export function formatLastRefreshed(isoString: string): string {
   if (diffMins === 1) return '1 min ago'
   return `${diffMins} mins ago`
 }
+
+export function formatGBP(value: number): string {
+  return '£' + value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+export function formatDate(iso: string): string {
+  if (!iso) return '—'
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+}

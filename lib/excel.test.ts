@@ -61,8 +61,6 @@ describe('parsePMMap', () => {
   })
 })
 
-// ─── Stage 5: parseDataTab ────────────────────────────────────────────────────
-
 // Builds a sparse row with the 26 columns the real sheet has.
 // Indices: 0=jobNo, 1=customer, 2=desc, 3=qty, 13=delivery, 14=date, 21=pm, 24=itemVal, 25=lineTotal
 function makeRow(overrides: Record<number, unknown> = {}): unknown[] {

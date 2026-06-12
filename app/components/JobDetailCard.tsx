@@ -2,8 +2,8 @@
 
 import { useEffect } from 'react'
 import type { JobDateGroup, PMBoard } from '@/lib/types'
-import { getRowStatus } from '@/lib/formatting'
-import StatusBadge from '@/app/components/StatusBadge'
+import { getRowStatus, formatGBP, formatDate } from '@/lib/formatting'
+import StatusBadges from '@/app/components/StatusBadges'
 
 type Props = {
   row: JobDateGroup
@@ -21,8 +21,6 @@ export default function JobDetailCard({ row, board, onClose }: Props) {
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
-
-  const groupTotal = row.productLines.reduce((sum, l) => sum + l.lineTotal, 0)
 
   return (
     /* Backdrop */
@@ -50,9 +48,7 @@ export default function JobDetailCard({ row, board, onClose }: Props) {
               </p>
               <div className="mt-2 flex items-center gap-1.5 flex-wrap">
                 <span className="text-sm text-gray-700">Due: {formatDate(row.requiredByDate)}</span>
-                {row.hasInstall && <StatusBadge variant="install" />}
-                {status === 'overdue' && <StatusBadge variant="overdue" />}
-                {status === 'due-soon' && <StatusBadge variant="due-soon" />}
+                <StatusBadges status={status} hasInstall={row.hasInstall} />
               </div>
             </div>
             <button
@@ -92,7 +88,7 @@ export default function JobDetailCard({ row, board, onClose }: Props) {
                   Group Total
                 </td>
                 <td className="px-4 py-2.5 text-sm font-semibold text-gray-900 text-right">
-                  {formatGBP(groupTotal)}
+                  {formatGBP(row.totalValue)}
                 </td>
               </tr>
             </tfoot>
@@ -109,11 +105,3 @@ const headerBg: Record<string, string> = {
   normal:    'bg-white',
 }
 
-function formatGBP(value: number): string {
-  return '£' + value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-}
-
-function formatDate(iso: string): string {
-  if (!iso) return '—'
-  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-}

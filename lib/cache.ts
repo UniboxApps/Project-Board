@@ -36,8 +36,7 @@ export async function getSelectedTabs(): Promise<string[]> {
   if (!stored || stored.length === 0) return [...ALWAYS_READ_TABS]
 
   // Ensure always-read tabs are always present even if missing from stored value
-  const merged = Array.from(new Set([...ALWAYS_READ_TABS, ...stored]))
-  return merged
+  return Array.from(new Set([...ALWAYS_READ_TABS, ...stored]))
 }
 
 // Persists the selected tabs. ALWAYS_READ_TABS are added automatically on read,

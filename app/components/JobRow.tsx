@@ -1,8 +1,8 @@
 'use client'
 
 import type { JobDateGroup } from '@/lib/types'
-import { getRowStatus } from '@/lib/formatting'
-import StatusBadge from '@/app/components/StatusBadge'
+import { getRowStatus, formatGBP, formatDate } from '@/lib/formatting'
+import StatusBadges from '@/app/components/StatusBadges'
 
 type Props = {
   row: JobDateGroup
@@ -37,20 +37,10 @@ export default function JobRow({ row, onSelect }: Props) {
           <span className={status === 'overdue' ? 'font-semibold text-red-700' : 'text-gray-700'}>
             {formatDate(row.requiredByDate)}
           </span>
-          {row.hasInstall && <StatusBadge variant="install" />}
-          {status === 'overdue' && <StatusBadge variant="overdue" />}
-          {status === 'due-soon' && <StatusBadge variant="due-soon" />}
+          <StatusBadges status={status} hasInstall={row.hasInstall} />
         </div>
       </td>
     </tr>
   )
 }
 
-function formatGBP(value: number): string {
-  return '£' + value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-}
-
-function formatDate(iso: string): string {
-  if (!iso) return '—'
-  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-}

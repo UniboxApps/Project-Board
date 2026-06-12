@@ -53,3 +53,10 @@ export async function getDashboardOrRefresh(): Promise<CachedDashboard> {
   if (cached) return cached
   return runWorker()
 }
+
+// Runs the worker and returns the summary shape that /api/refresh and /api/cron
+// both report back to their callers.
+export async function refreshDashboard(): Promise<{ lastRefreshed: string; tabsProcessed: string[] }> {
+  const { lastRefreshed, tabsProcessed } = await runWorker()
+  return { lastRefreshed, tabsProcessed }
+}

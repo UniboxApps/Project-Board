@@ -1,5 +1,14 @@
 import type { ParsedRow, PMMap, ProductLine, JobDateGroup, PMBoard, CachedDashboard } from '@/lib/types'
 
+type GroupAcc = {
+  jobNumber: string
+  customerName: string
+  requiredByDate: string
+  totalValue: number
+  hasInstall: boolean
+  productLines: ProductLine[]
+}
+
 // Groups ParsedRows into a CachedDashboard ready for the cache layer.
 //
 // Grouping rules:
@@ -77,13 +86,4 @@ function compareDates(a: string, b: string): number {
   if (!a) return 1
   if (!b) return -1
   return a.localeCompare(b)
-}
-
-type GroupAcc = {
-  jobNumber: string
-  customerName: string
-  requiredByDate: string
-  totalValue: number
-  hasInstall: boolean
-  productLines: ProductLine[]
 }
