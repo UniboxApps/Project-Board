@@ -104,13 +104,13 @@ config/
 | 3 | Microsoft Graph API — token, list worksheets, fetch sheet data | Done |
 | 4 | List tab parser — reads List tab, builds PMMap | Done |
 | 5 | Data tab parser — column mapping, row filtering, ParsedRow objects | Done |
-| 6 | Job grouping logic | Next |
-| 7 | Redis cache layer (Upstash) | Pending |
-| 8 | Background worker — full pipeline + cron schedule | Pending |
-| 9 | Settings page — tab selector + PM list viewer | Pending |
-| 10 | API routes — /api/jobs, /api/refresh, /api/settings | Pending |
-| 11 | Home dashboard — PM grid, tables, row formatting | Pending |
-| 12 | Job detail card — modal overlay with product lines | Pending |
+| 6 | Job grouping logic | Done |
+| 7 | Redis cache layer (Upstash) | Done |
+| 8 | Background worker — full pipeline + cron schedule | Done |
+| 9 | Settings page — tab selector + PM list viewer | Done |
+| 10 | API routes — /api/jobs, /api/refresh, /api/settings | Done |
+| 11 | Home dashboard — PM grid, tables, row formatting | Done |
+| 12 | Job detail card — modal overlay with product lines | Next |
 | 13 | Polish — skeletons, last synced, error boundaries, mobile | Pending |
 
 ---

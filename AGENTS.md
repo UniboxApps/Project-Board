@@ -20,9 +20,9 @@ Next.js 16 app (App Router). Full specification is in `PLAN.md` one level above 
 - **Testing** — Vitest. Run `npm test`. Test files live alongside source files as `*.test.ts`.
 - **Package manager** — npm only.
 
-## Build status (as of Stage 5 complete)
+## Build status (as of Stage 11 complete)
 
-Stages 1–5 are done. Stage 6 (job grouping) is next.
+Stages 1–11 are done. Stage 12 (job detail modal) is next.
 
 | File | Purpose | Stage |
 |---|---|---|
@@ -37,14 +37,23 @@ Stages 1–5 are done. Stage 6 (job grouping) is next.
 | `lib/types.ts` | PMMap, ProductLine, ParsedRow, JobDateGroup, Job, PMBoard, CachedDashboard | 4–5 |
 | `config/columns.ts` | COLUMN_MAP — Excel column indices | 1 |
 | `config/constants.ts` | REDIS_KEYS, ALWAYS_READ_TABS, CACHE_REFRESH_MINUTES | 1 |
+| `lib/grouping.ts` | buildDashboard — groups ParsedRows by jobNumber+date composite key, sums values, detects Install, sorts by date asc | 6 |
+| `lib/cache.ts` | getDashboard/setDashboard, getSelectedTabs/setSelectedTabs — Upstash Redis lazy singleton | 7 |
+| `lib/worker.ts` | runWorker (full pipeline) + getDashboardOrRefresh (cold-start fallback) | 8 |
+| `app/api/cron/route.ts` | Vercel Cron endpoint — protected by CRON_SECRET, triggers runWorker | 8 |
+| `vercel.json` | Cron schedule — /api/cron every 10 minutes | 8 |
+| `app/(protected)/settings/page.tsx` | Tab selector UI + PM list viewer | 9 |
+| `app/api/settings/route.ts` | GET/POST selected tab config to/from Redis | 9–10 |
+| `app/api/jobs/route.ts` | GET CachedDashboard — cold-start triggers worker if cache empty | 10 |
+| `app/api/refresh/route.ts` | POST — manually triggers runWorker, returns lastRefreshed + tabsProcessed | 10 |
+| `lib/formatting.ts` | getRowStatus (overdue/due-soon/normal, vanilla JS), formatLastRefreshed ("X mins ago") | 11 |
+| `app/components/StatusBadge.tsx` | Coloured pill badges — Install (purple), Overdue (red), Due Soon (amber) | 11 |
+| `app/components/JobRow.tsx` | Client component — clickable row with status bg colours + badges, onSelect callback ready for Stage 12 | 11 |
+| `app/components/PMBoard.tsx` | Client component — PM card with summary header + table, tracks selectedRow state for Stage 12 | 11 |
+| `app/components/RefreshButton.tsx` | Client component — POST /api/refresh + router.refresh(), suppressHydrationWarning on relative timestamp | 11 |
+| `app/(protected)/page.tsx` | Server component — fetches CachedDashboard via getDashboardOrRefresh, renders 2-col PM grid | 11 |
 
 ## Stages still to implement
 
-6. `lib/grouping.ts` — group ParsedRows by jobNumber+date, build PMBoard objects  
-7. `lib/cache.ts` — Upstash Redis read/write  
-8. `lib/worker.ts` — full pipeline: fetch → parse → group → cache  
-9. Settings page + `/api/settings`  
-10. `/api/jobs`, `/api/refresh` wired up  
-11. Home dashboard UI — PM cards, tables, Install/overdue/due-soon badges  
-12. Job detail modal  
-13. Polish — skeletons, error boundaries, mobile layout
+12. Job detail modal — modal overlay with product line breakdown (`app/components/JobDetailCard.tsx`)  
+13. Polish — loading skeletons, last synced timestamp, error boundaries, mobile layout

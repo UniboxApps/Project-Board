@@ -2,14 +2,23 @@
 
 # Claude Code notes for this project
 
-## What has been built (Stages 1–5)
+## What has been built (Stages 1–11)
 
 - Next.js 16 scaffolded at `Frontend/unibox-project-board/`
 - Auth: NextAuth v5 beta with MicrosoftEntraID — tenant-locked + `@unibox.co.uk` domain check
 - Route protection in `proxy.ts` (Next.js 16 renamed middleware → proxy)
 - Microsoft Graph API connection in `lib/graph.ts` — app-only client credentials
 - List tab parser (`parsePMMap`) and data tab parser (`parseDataTab`) in `lib/excel.ts`
-- 17 unit tests passing via Vitest (`npm test`)
+- Job grouping in `lib/grouping.ts` — `buildDashboard` groups by jobNumber+date, sums values, detects Install
+- Redis cache in `lib/cache.ts` — Upstash lazy singleton, dashboard + tab config read/write
+- Full worker pipeline in `lib/worker.ts` — `runWorker` + `getDashboardOrRefresh` cold-start fallback
+- Vercel Cron at `/api/cron` (every 10 min), protected by `CRON_SECRET`
+- Settings page at `/settings` — tab selector + read-only PM list
+- API routes: `/api/jobs` (GET), `/api/refresh` (POST), `/api/settings` (GET/POST), `/api/tabs` (GET)
+- Home dashboard: `app/(protected)/page.tsx` server component, PM grid (2-col desktop / 1-col mobile)
+- `lib/formatting.ts`: `getRowStatus` + `formatLastRefreshed` (vanilla JS, no date-fns)
+- Components: `StatusBadge`, `JobRow` (clickable, status colours), `PMBoard` (card + table, selectedRow state ready for Stage 12), `RefreshButton` (POST /api/refresh + router.refresh())
+- Unit tests passing via Vitest (`npm test`)
 
 ## Decisions made during build
 
@@ -18,7 +27,9 @@
 - Graph API returns Excel date cells as serial numbers — convert via `(serial - 25569) * 86400000`
 - `app/page.tsx` (scaffold default) was deleted — `app/(protected)/page.tsx` handles `/`
 - `middleware.ts` was renamed to `proxy.ts` to fix Next.js 16 deprecation warning
+- `/api/jobs` cold-start: if Redis cache is empty, `getDashboardOrRefresh` runs the worker inline rather than returning a 404
+- Cron endpoint uses `CRON_SECRET` header/query param for auth (Vercel passes it as a header)
 
 ## Next stage
 
-Stage 6: job grouping logic in `lib/grouping.ts`
+Stage 12: job detail modal — `app/components/JobDetailCard.tsx` modal overlay showing product lines for the clicked job+date group. PMBoard already tracks `selectedRow` state ready to wire it in.
