@@ -33,11 +33,11 @@ export default function JobDetailCard({ row, board, onClose }: Props) {
 
       {/* Card */}
       <div
-        className="relative z-10 w-full max-w-2xl bg-white rounded-lg shadow-xl overflow-hidden"
+        className="relative z-10 w-full max-w-2xl bg-white rounded-lg shadow-xl flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className={`px-5 py-4 border-b ${headerBg[status]}`}>
+        {/* Header — fixed, never scrolls */}
+        <div className={`px-5 py-4 border-b shrink-0 ${headerBg[status]}`}>
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 className="text-base font-semibold text-gray-900">
@@ -61,8 +61,8 @@ export default function JobDetailCard({ row, board, onClose }: Props) {
           </div>
         </div>
 
-        {/* Product lines table */}
-        <div className="overflow-x-auto">
+        {/* Column headers — fixed, never scrolls */}
+        <div className="shrink-0 overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
@@ -72,6 +72,12 @@ export default function JobDetailCard({ row, board, onClose }: Props) {
                 <th className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wide text-right whitespace-nowrap">Total £</th>
               </tr>
             </thead>
+          </table>
+        </div>
+
+        {/* Scrollable line items */}
+        <div className="overflow-y-auto overflow-x-auto">
+          <table className="w-full text-left">
             <tbody className="divide-y divide-gray-100">
               {row.productLines.map((line, i) => (
                 <tr key={i} className="text-sm">
@@ -82,8 +88,14 @@ export default function JobDetailCard({ row, board, onClose }: Props) {
                 </tr>
               ))}
             </tbody>
+          </table>
+        </div>
+
+        {/* Footer total — fixed, never scrolls */}
+        <div className="shrink-0 overflow-x-auto border-t-2 border-gray-200">
+          <table className="w-full text-left">
             <tfoot>
-              <tr className="border-t-2 border-gray-200 bg-gray-50">
+              <tr className="bg-gray-50">
                 <td colSpan={3} className="px-4 py-2.5 text-sm font-medium text-gray-700 text-right">
                   Group Total
                 </td>
