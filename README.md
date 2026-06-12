@@ -68,7 +68,7 @@ app/
   (protected)/          # Auth-gated routes (route group — no URL segment)
     page.tsx            # Home dashboard — PM grid (Stage 11)
     settings/page.tsx   # Settings page (Stage 9)
-    layout.tsx          # Session check + header bar with sign-out
+    layout.tsx          # Header: brand + Settings nav + Last synced/Refresh + user/sign-out
   api/
     auth/[...nextauth]/ # NextAuth route handler
     jobs/route.ts       # Returns CachedDashboard from Redis (Stage 10)
@@ -80,12 +80,12 @@ app/
   layout.tsx            # Root layout
   components/
     StatusBadge.tsx     # Single pill badge (Install / Overdue / Due Soon)
-    StatusBadges.tsx    # Badge trio rendered by JobRow + JobDetailCard
-    JobRow.tsx          # Clickable table row with status colours
+    StatusBadges.tsx    # Badge trio used by JobDetailCard
+    JobRow.tsx          # Clickable row — Install/Overdue badges by job no; yellow Install highlight; compact height
     JobDetailCard.tsx   # Modal overlay with product lines table
-    PMBoard.tsx         # PM card with header + job table
-    RefreshButton.tsx   # Triggers /api/refresh + router.refresh()
-    TabSelector.tsx     # Settings — tab checkbox list
+    PMBoard.tsx         # PM card — single-line header: name (initials) left, count + total right
+    RefreshButton.tsx   # Last synced + Refresh button — lives in the layout header
+    TabSelector.tsx     # Settings — Save → refresh → redirect to dashboard
     PMList.tsx          # Settings — read-only PM list
 components/ui/          # shadcn/ui components
 lib/
@@ -95,7 +95,7 @@ lib/
   grouping.ts           # Job grouping and sorting logic (Stage 6)
   cache.ts              # Redis read/write helpers (Stage 7)
   worker.ts             # Full pipeline (Stage 8)
-  formatting.ts         # Shared formatters: getRowStatus, formatGBP, formatDate, formatLastRefreshed
+  formatting.ts         # Shared formatters: getRowStatus, formatGBP (0 dp), formatDate, formatLastRefreshed
   api.ts                # jsonRoute() — shared error-handling wrapper for API routes
 config/
   columns.ts            # COLUMN_MAP — single source of truth for Excel layout
@@ -121,7 +121,8 @@ config/
 | 11 | Home dashboard — PM grid, tables, row formatting | Done |
 | 12 | Job detail card — modal overlay with product lines | Done |
 | — | Refactor + code-simplifier pass | Done |
-| 13 | Polish — skeletons, last synced, error boundaries, mobile | Next |
+| — | Design pass — font, header layout, PM card, row styling, Settings save flow | Done |
+| 13 | Polish — skeletons, error boundaries, mobile layout review | Next |
 
 ---
 
@@ -133,3 +134,9 @@ config/
 - **Excel dates:** Graph API returns date cells as Excel serial numbers. `parseDataTab` converts them to ISO `YYYY-MM-DD` strings using `(serial - 25569) * 86400000`.
 - **Column map:** All Excel column indices live in `config/columns.ts`. If the spreadsheet layout ever changes, only that file needs updating.
 - **List tab:** Always read on every worker run. Never shown as toggleable in Settings. Single source of truth for which PMs are tracked.
+- **Font:** Inter (Google Fonts) loaded via `next/font/google`, variable set to `--font-sans`. Replaces the default Geist scaffold font.
+- **Header layout:** Single bar — brand left, Settings nav centre, Last synced + Refresh + user + sign-out right. The layout server component reads `lastRefreshed` from the Redis cache so the header can show it on every page.
+- **PM card header:** One line — `Name (Initials)` left-aligned, project count + total value right-aligned.
+- **Currency formatting:** `formatGBP` uses 0 decimal places throughout (e.g. £5,352 not £5,351.81).
+- **Row styling:** Install badge and Overdue badge sit inline with the job number. Install rows have a yellow (`bg-yellow-50`) background. Overdue rows remain red; due-soon rows amber. Row padding reduced to `py-1.5` for a more compact table.
+- **Settings save flow:** Clicking Save in TabSelector POSTs to `/api/settings`, then immediately POSTs to `/api/refresh`, then redirects to `/`. Button label tracks each stage (Saving… → Refreshing… → redirect). No separate Refresh Now button needed.
