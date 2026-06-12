@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { formatLastRefreshed } from '@/lib/formatting'
 
@@ -8,6 +8,14 @@ export default function RefreshButton({ lastRefreshed }: { lastRefreshed: string
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [relativeTime, setRelativeTime] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!lastRefreshed) return
+    setRelativeTime(formatLastRefreshed(lastRefreshed))
+    const id = setInterval(() => setRelativeTime(formatLastRefreshed(lastRefreshed)), 60_000)
+    return () => clearInterval(id)
+  }, [lastRefreshed])
 
   async function handleRefresh() {
     setLoading(true)
@@ -26,9 +34,9 @@ export default function RefreshButton({ lastRefreshed }: { lastRefreshed: string
   return (
     <div className="flex items-center gap-3">
       {error && <span className="text-red-600">{error}</span>}
-      {lastRefreshed && (
-        <span className="text-gray-500" suppressHydrationWarning>
-          Last synced: {formatLastRefreshed(lastRefreshed)}
+      {relativeTime && (
+        <span className="text-gray-500">
+          Data synced: {relativeTime}
         </span>
       )}
       <button
