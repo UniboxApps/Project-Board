@@ -20,16 +20,18 @@ Next.js 16 app (App Router). Full specification is in `PLAN.md` one level above 
 - **Testing** — Vitest. Run `npm test`. Test files live alongside source files as `*.test.ts`.
 - **Package manager** — npm only.
 
-## Build status (as of Stage 12 complete + design pass 2026-06-12)
+## Build status (as of Stage 13 complete + deployed 2026-06-12)
 
-Stages 1–12 are done. A refactor + code-simplifier pass was run, followed by a design pass (2026-06-12) — see PLAN.md for notes on both. Stage 13 (polish) is next.
+All stages complete. App is live at `https://unibox-project-board.vercel.app`. Auto-deploys on every push to `master`.
 
 | File | Purpose | Stage |
 |---|---|---|
 | `auth.ts` | NextAuth config — MicrosoftEntraID, tenant-locked, email domain check | 2 |
 | `proxy.ts` | Route protection — redirects unauthenticated users to /login | 2 |
 | `app/login/page.tsx` | Microsoft sign-in page | 2 |
-| `app/(protected)/layout.tsx` | Header: brand (Unibox + Project Board), centre nav (Settings link), right (Last synced + Refresh + user + sign-out); reads lastRefreshed from cache | design |
+| `app/(protected)/layout.tsx` | Responsive header — two-row on mobile, single-row on desktop. Uses `<Suspense><HeaderTimestamp /></Suspense>` for non-blocking timestamp. Mounts `<AutoRefresh />`. | 13 |
+| `app/(protected)/loading.tsx` | Skeleton shown on navigation — two pulsing PM card placeholders | 13 |
+| `app/(protected)/error.tsx` | Error boundary — red panel with digest + retry button (`reset()`) | 13 |
 | `app/layout.tsx` | Root layout — Inter font (sans-serif), antialiased | design |
 | `next.config.ts` | `devIndicators: false` — hides Next.js dev "N" indicator | design |
 | `lib/graph.ts` | Graph API: getGraphToken, graphGet helper, listWorksheets, getWorksheetRange | 3 |
@@ -54,11 +56,9 @@ Stages 1–12 are done. A refactor + code-simplifier pass was run, followed by a
 | `app/components/StatusBadges.tsx` | Renders the Install + status badge trio; used by JobDetailCard | refactor |
 | `app/components/JobRow.tsx` | Clickable row — Install+Overdue badges inline with job number; yellow highlight for Install rows; compact py-1.5 | design |
 | `app/components/PMBoard.tsx` | PM card — single-line header: name (initials) left, project count + total right | design |
-| `app/components/RefreshButton.tsx` | POST /api/refresh + router.refresh(); accepts `lastRefreshed: string \| null`; lives in header | design |
-| `app/(protected)/page.tsx` | Server component — fetches CachedDashboard, renders 2-col PM grid (no page-level heading — header carries it) | 11 + design |
+| `app/components/RefreshButton.tsx` | Fully prop-driven — renders `lastRefreshed` prop directly (no local state). POST /api/refresh + router.refresh() on manual trigger. | 13 |
+| `app/components/HeaderTimestamp.tsx` | Async server component — fetches lastRefreshed from Redis, renders RefreshButton. Wrapped in Suspense in layout. | 13 |
+| `app/components/AutoRefresh.tsx` | Invisible client component — 9-minute setInterval calling router.refresh() for silent background data updates | 13 |
+| `app/(protected)/page.tsx` | Server component — fetches CachedDashboard, renders 2-col PM grid | 11 + design |
 | `app/components/TabSelector.tsx` | Save → POST /api/settings → POST /api/refresh → router.push('/'); button label tracks each stage | design |
-| `app/components/JobDetailCard.tsx` | Modal overlay — backdrop + Escape to close, status-tinted header, product lines table, uses row.totalValue for footer | 12 |
-
-## Stages still to implement
-
-13. Polish — loading skeletons, error boundaries, mobile layout
+| `app/components/JobDetailCard.tsx` | Modal overlay — max-h-[90vh], fixed header/column-headers/footer, scrollable tbody only | 12 + fix |
