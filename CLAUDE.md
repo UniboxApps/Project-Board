@@ -2,7 +2,7 @@
 
 # Claude Code notes for this project
 
-## What has been built (Stages 1–11)
+## What has been built (Stages 1–12)
 
 - Next.js 16 scaffolded at `Frontend/unibox-project-board/`
 - Auth: NextAuth v5 beta with MicrosoftEntraID — tenant-locked + `@unibox.co.uk` domain check
@@ -17,7 +17,8 @@
 - API routes: `/api/jobs` (GET), `/api/refresh` (POST), `/api/settings` (GET/POST), `/api/tabs` (GET)
 - Home dashboard: `app/(protected)/page.tsx` server component, PM grid (2-col desktop / 1-col mobile)
 - `lib/formatting.ts`: `getRowStatus` + `formatLastRefreshed` (vanilla JS, no date-fns)
-- Components: `StatusBadge`, `JobRow` (clickable, status colours), `PMBoard` (card + table, selectedRow state ready for Stage 12), `RefreshButton` (POST /api/refresh + router.refresh())
+- Components: `StatusBadge`, `JobRow` (clickable, status colours), `PMBoard` (card + table, selectedRow state), `RefreshButton` (POST /api/refresh + router.refresh())
+- `JobDetailCard`: modal overlay, backdrop + Escape to close, status-tinted header with badges, product lines table, group total footer
 - Unit tests passing via Vitest (`npm test`)
 
 ## Decisions made during build
@@ -32,4 +33,4 @@
 
 ## Next stage
 
-Stage 12: job detail modal — `app/components/JobDetailCard.tsx` modal overlay showing product lines for the clicked job+date group. PMBoard already tracks `selectedRow` state ready to wire it in.
+Stage 13: polish — loading skeletons, error boundaries, mobile layout review.

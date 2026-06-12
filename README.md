@@ -110,8 +110,8 @@ config/
 | 9 | Settings page — tab selector + PM list viewer | Done |
 | 10 | API routes — /api/jobs, /api/refresh, /api/settings | Done |
 | 11 | Home dashboard — PM grid, tables, row formatting | Done |
-| 12 | Job detail card — modal overlay with product lines | Next |
-| 13 | Polish — skeletons, last synced, error boundaries, mobile | Pending |
+| 12 | Job detail card — modal overlay with product lines | Done |
+| 13 | Polish — skeletons, last synced, error boundaries, mobile | Next |
 
 ---
 

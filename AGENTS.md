@@ -20,9 +20,9 @@ Next.js 16 app (App Router). Full specification is in `PLAN.md` one level above 
 - **Testing** — Vitest. Run `npm test`. Test files live alongside source files as `*.test.ts`.
 - **Package manager** — npm only.
 
-## Build status (as of Stage 11 complete)
+## Build status (as of Stage 12 complete)
 
-Stages 1–11 are done. Stage 12 (job detail modal) is next.
+Stages 1–12 are done. Stage 13 (polish) is next.
 
 | File | Purpose | Stage |
 |---|---|---|
@@ -53,7 +53,8 @@ Stages 1–11 are done. Stage 12 (job detail modal) is next.
 | `app/components/RefreshButton.tsx` | Client component — POST /api/refresh + router.refresh(), suppressHydrationWarning on relative timestamp | 11 |
 | `app/(protected)/page.tsx` | Server component — fetches CachedDashboard via getDashboardOrRefresh, renders 2-col PM grid | 11 |
 
+| `app/components/JobDetailCard.tsx` | Modal overlay — backdrop + Escape to close, status-tinted header, product lines table, group total footer | 12 |
+
 ## Stages still to implement
 
-12. Job detail modal — modal overlay with product line breakdown (`app/components/JobDetailCard.tsx`)  
-13. Polish — loading skeletons, last synced timestamp, error boundaries, mobile layout
+13. Polish — loading skeletons, error boundaries, mobile layout

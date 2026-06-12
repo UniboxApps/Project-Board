@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { PMBoard, JobDateGroup } from '@/lib/types'
 import JobRow from '@/app/components/JobRow'
+import JobDetailCard from '@/app/components/JobDetailCard'
 
 export default function PMBoardCard({ board }: { board: PMBoard }) {
   const [selectedRow, setSelectedRow] = useState<JobDateGroup | null>(null)
@@ -44,11 +45,12 @@ export default function PMBoardCard({ board }: { board: PMBoard }) {
         )}
       </div>
 
-      {/* Stage 12: JobDetailCard rendered here when selectedRow is set */}
       {selectedRow && (
-        <div className="hidden" aria-hidden>
-          {/* placeholder — wired up in Stage 12 */}
-        </div>
+        <JobDetailCard
+          row={selectedRow}
+          board={board}
+          onClose={() => setSelectedRow(null)}
+        />
       )}
     </>
   )
