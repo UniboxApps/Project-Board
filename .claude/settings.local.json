@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-Content *)",
+      "PowerShell(Get-ChildItem -Recurse \"Frontend\\\\unibox-project-board\" -Name | Where-Object { $_ -notmatch \"node_modules\" -and $_ -notmatch \"\\\\.next\" } | Sort-Object)",
+      "Bash(Test-Path *)",
+      "Bash(grep *)",
+      "Bash(Remove-Item -Recurse -Force \"C:\\\\Users\\\\p.bolton\\\\OneDrive - Unibox\\\\Documents\\\\Projects\\\\Project Board\\\\Frontend\\\\unibox-project-board\\\\.next\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item -Force \"C:\\\\Users\\\\p.bolton\\\\OneDrive - Unibox\\\\Documents\\\\Projects\\\\Project Board\\\\Frontend\\\\unibox-project-board\\\\tsconfig.tsbuildinfo\" -ErrorAction SilentlyContinue)",
+      "Bash(Write-Output \"Cleared\")",
+      "Bash(npx tsc *)",
+      "Bash(npm test *)",
+      "Bash(Select-Object -Last 60)",
+      "PowerShell(git *)",
+      "Bash(node *)",
+      "Bash(npm run *)",
+      "Bash(git add *)"
+    ]
+  },
+  "enabledPlugins": {
+    "code-simplifier@claude-plugins-official": true
+  }
+}
