@@ -20,6 +20,7 @@ export default async function ProtectedLayout({ children }: { children: React.Re
           {/* Brand */}
           <div className="flex items-center gap-2 shrink-0">
             <span className="text-xl font-bold tracking-tight text-gray-900">Unibox</span>
+            <span className="text-sm font-medium text-gray-400">x</span>
             <span className="text-sm font-medium text-gray-400">Project Board</span>
           </div>
 
